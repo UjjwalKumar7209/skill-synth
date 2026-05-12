@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+
+  profile    Profile?
+  interviews Interview[]
+}
+
+model Profile {
+  id              String @id @default(cuid())
+  userId          String @unique
+  skills          String
+  experienceLevel String
+  targetRole      String
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Interview {
+  id         String   @id @default(cuid())
+  userId     String
+  company    String
+  type       String
+  difficulty String
+  feedback   String?
+  createdAt  DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  messages Message[]
+}
+
+model Message {
+  id          String   @id @default(cuid())
+  interviewId String
+  sender      String
+  message     String
+  createdAt   DateTime @default(now())
+
+  interview Interview @relation(fields: [interviewId], references: [id])
+}
