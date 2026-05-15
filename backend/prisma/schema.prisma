@@ -34,13 +34,16 @@ model Profile {
 }
 
 model Interview {
-  id         String   @id @default(cuid())
-  userId     String
-  company    String
-  type       String
-  difficulty String
-  feedback   String?
-  createdAt  DateTime @default(now())
+  id            String   @id @default(cuid())
+  userId        String
+  company       String
+  type          String
+  difficulty    String
+  questionCount Int      @default(0)
+  followUpCount Int      @default(0)
+  feedback      String?
+  isCompleted   Boolean  @default(false)
+  createdAt     DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id])
 
