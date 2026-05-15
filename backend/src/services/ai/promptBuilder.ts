@@ -93,3 +93,46 @@ OR
 }
 `
 }
+
+
+export const buildFeedbackPrompt = (
+  conversation: string
+) => {
+  return `
+You are an expert technical interviewer.
+
+Analyze the following interview conversation.
+
+Interview conversation:
+${conversation}
+
+Your task:
+- Evaluate the candidate professionally.
+- Analyze technical understanding.
+- Analyze communication quality.
+- Analyze problem solving ability.
+- Identify strengths.
+- Identify weaknesses.
+- Suggest improvements.
+
+Return ONLY valid JSON.
+
+Format:
+
+{
+  "technicalScore": 0,
+  "communicationScore": 0,
+  "problemSolvingScore": 0,
+  "strengths": "...",
+  "weaknesses": "...",
+  "suggestions": "...",
+  "summary": "..."
+}
+
+Rules:
+- Scores must be between 0 and 100.
+- Be realistic.
+- Do not be overly positive.
+- Keep strengths and weaknesses concise.
+`
+}

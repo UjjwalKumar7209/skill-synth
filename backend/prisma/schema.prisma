@@ -41,7 +41,7 @@ model Interview {
   difficulty    String
   questionCount Int      @default(0)
   followUpCount Int      @default(0)
-  feedback      String?
+  feedback      Feedback?
   isCompleted   Boolean  @default(false)
   createdAt     DateTime @default(now())
 
@@ -56,6 +56,25 @@ model Message {
   sender      String
   message     String
   createdAt   DateTime @default(now())
+
+  interview Interview @relation(fields: [interviewId], references: [id])
+}
+
+model Feedback {
+  id String @id @default(cuid())
+
+  interviewId String @unique
+
+  technicalScore Int
+  communicationScore Int
+  problemSolvingScore Int
+
+  strengths String
+  weaknesses String
+  suggestions String
+  summary String
+
+  createdAt DateTime @default(now())
 
   interview Interview @relation(fields: [interviewId], references: [id])
 }

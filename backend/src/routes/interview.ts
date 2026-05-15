@@ -9,6 +9,7 @@ import {
   generateFirstInterviewQuestion,
   generateReply
 } from '../services/ai/interviewEngine'
+import { generateInterviewFeedback } from '../services/ai/feedbackEngine'
 
 const router = express.Router()
 
@@ -247,6 +248,51 @@ router.post('/reply', async (req: Request, res: Response) => {
           isCompleted: true
         }
       })
+      // STORE FINAL AI MESSAGE
+      await prisma.message.create({
+        data: {
+          interviewId,
+          sender: 'AI',
+          message: parsedResponse.message
+        }
+      })
+      const interviewMessages = await prisma.message.findMany({
+        where: {
+          interviewId
+        },
+        orderBy: {
+          createdAt: 'asc'
+        }
+      })
+      const feedbackResponse =
+        await generateInterviewFeedback(interviewMessages)
+      let parsedFeedback
+
+      try {
+        parsedFeedback = JSON.parse(feedbackResponse)
+      } catch {
+        return res.status(500).json({
+          msg: 'Invalid feedback format'
+        })
+      }
+
+      await prisma.feedback.create({
+        data: {
+          interviewId,
+          technicalScore: parsedFeedback.technicalScore,
+          communicationScore: parsedFeedback.communicationScore,
+          problemSolvingScore: parsedFeedback.problemSolvingScore,
+          strengths: parsedFeedback.strengths,
+          weaknesses: parsedFeedback.weaknesses,
+          suggestions: parsedFeedback.suggestions,
+          summary: parsedFeedback.summary
+        }
+      })
+      return res.status(200).json({
+        action: 'END_INTERVIEW',
+        message: parsedResponse.message,
+        feedback: parsedFeedback
+      })
     }
 
     // STORE AI MESSAGE
@@ -259,6 +305,95 @@ router.post('/reply', async (req: Request, res: Response) => {
     })
 
     return res.status(200).json(parsedResponse)
+  } catch (error) {
+    console.log(error)
+
+    return res.status(500).json({
+      msg: 'Internal server error'
+    })
+  }
+})
+
+router.get('/history', async (req: Request, res: Response) => {
+  if (!req.userId) {
+    return res.status(401).json({
+      msg: 'Unauthorized'
+    })
+  }
+
+  try {
+    const interviews = await prisma.interview.findMany({
+      where: {
+        userId: req.userId
+      },
+
+      include: {
+        feedback: {
+          select: {
+            technicalScore: true,
+            communicationScore: true,
+            problemSolvingScore: true
+          }
+        }
+      },
+
+      orderBy: {
+        createdAt: 'desc'
+      }
+    })
+
+    return res.status(200).json({
+      interviews
+    })
+  } catch (error) {
+    console.log(error)
+
+    return res.status(500).json({
+      msg: 'Internal server error'
+    })
+  }
+})
+
+router.get('/:id', async (req: Request, res: Response) => {
+  if (!req.userId) {
+    return res.status(401).json({
+      msg: 'Unauthorized'
+    })
+  }
+
+  const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id
+
+  try {
+    const interview = await prisma.interview.findUnique({
+      where: {
+        id
+      },
+      include: {
+        messages: {
+          orderBy: {
+            createdAt: 'asc'
+          }
+        },
+        feedback: true
+      }
+    })
+
+    if (!interview) {
+      return res.status(404).json({
+        msg: 'Interview not found'
+      })
+    }
+
+    // SECURITY CHECK
+    if (interview.userId !== req.userId) {
+      return res.status(403).json({
+        msg: 'Forbidden'
+      })
+    }
+
+    return res.status(200).json({
+      interview
+    })
   } catch (error) {
     console.log(error)
 
