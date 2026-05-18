@@ -61,15 +61,14 @@ Possible actions:
 - NEW_QUESTION
 - END_INTERVIEW
 
-${
-  forceNewQuestion
-    ? `
+${forceNewQuestion
+      ? `
 IMPORTANT:
 You are NOT allowed to ask a FOLLOW_UP question anymore.
 You MUST ask a NEW_QUESTION.
 `
-    : ''
-}
+      : ''
+    }
 
 Response format:
 

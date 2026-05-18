@@ -1,9 +1,15 @@
-import Image from "next/image";
+import Footer from "@/components/Footer";
+import Hero from "@/components/Hero";
+import LandingFlow from "@/components/LandingFlow";
+import Navbar from "@/components/Navbar";
 
 export default function Home() {
   return (
     <div>
-      Hello
+      <Navbar />
+      <Hero />
+      <LandingFlow />
+      <Footer />
     </div>
   )
 }
