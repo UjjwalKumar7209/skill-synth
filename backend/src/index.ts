@@ -5,6 +5,7 @@ import { authMiddleware } from "./middleware/authMiddleware";
 import authRoutes from './routes/auth'
 import profileRoutes from './routes/profile'
 import interviewRoutes from './routes/interview'
+import aptitudeRoutes from './routes/aptitude'
 
 dotenv.config()
 
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use('/api/v1/auth', authRoutes)
 app.use('/api/v1/profile', authMiddleware, profileRoutes)
 app.use('/api/v1/interview', authMiddleware, interviewRoutes)
+app.use('/api/v1/aptitude', authMiddleware, aptitudeRoutes)
 
 app.get("/", (_, res) => {
   res.send("SkillSynth Backend Running");

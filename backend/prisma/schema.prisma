@@ -19,8 +19,9 @@ model User {
   password  String
   createdAt DateTime @default(now())
 
-  profile    Profile?
-  interviews Interview[]
+  profile       Profile?
+  interviews    Interview[]
+  aptitudeTests AptitudeTest[]
 }
 
 model Profile {
@@ -34,16 +35,16 @@ model Profile {
 }
 
 model Interview {
-  id            String   @id @default(cuid())
+  id            String    @id @default(cuid())
   userId        String
   company       String
   type          String
   difficulty    String
-  questionCount Int      @default(0)
-  followUpCount Int      @default(0)
+  questionCount Int       @default(0)
+  followUpCount Int       @default(0)
   feedback      Feedback?
-  isCompleted   Boolean  @default(false)
-  createdAt     DateTime @default(now())
+  isCompleted   Boolean   @default(false)
+  createdAt     DateTime  @default(now())
 
   user User @relation(fields: [userId], references: [id])
 
@@ -65,16 +66,49 @@ model Feedback {
 
   interviewId String @unique
 
-  technicalScore Int
-  communicationScore Int
+  technicalScore      Int
+  communicationScore  Int
   problemSolvingScore Int
 
-  strengths String
-  weaknesses String
+  strengths   String
+  weaknesses  String
   suggestions String
-  summary String
+  summary     String
 
   createdAt DateTime @default(now())
 
   interview Interview @relation(fields: [interviewId], references: [id])
+}
+
+model AptitudeTest {
+  id String @id @default(cuid())
+
+  userId     String
+  company    String
+  difficulty String
+
+  score       Int?
+  totalMarks  Int?
+  isCompleted Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  questions AptitudeQuestion[]
+}
+
+model AptitudeQuestion {
+  id String @id @default(cuid())
+
+  aptitudeTestId String
+
+  question      String
+  options       Json
+  correctAnswer String
+  explanation   String
+
+  userAnswer String?
+
+  aptitudeTest AptitudeTest @relation(fields: [aptitudeTestId], references: [id])
 }
