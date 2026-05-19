@@ -15,7 +15,6 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.6.2",
     "@types/pg": "^8.20.0",
-    "prisma": "^7.8.0",
     "tsx": "^4.21.0"
   },
   "peerDependencies": {
@@ -23,7 +22,6 @@
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",
-    "@prisma/client": "^7.8.0",
     "axios": "^1.16.1",
     "bcrypt": "^6.0.0",
     "bcrypt-ts": "^8.0.1",
