@@ -191,11 +191,18 @@ router.get('/history', async (req: Request, res: Response) => {
 })
 
 router.get('/:id', async (req: Request, res: Response) => {
-  const { id } = req.params
+  const idParam = req.params.id
+  const id = Array.isArray(idParam) ? idParam[0] : idParam
 
   if (!req.userId) {
     return res.status(401).json({
       msg: 'Unauthorized'
+    })
+  }
+
+  if (!id) {
+    return res.status(400).json({
+      msg: 'Test id is required'
     })
   }
 

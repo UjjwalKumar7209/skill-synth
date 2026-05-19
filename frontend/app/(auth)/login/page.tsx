@@ -1,56 +1,56 @@
-"use client";
+'use client'
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/context/auth-context";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { ModeToggle } from "@/components/toggle-theme";
-import { Loader2 } from "lucide-react";
-import { AxiosError } from "axios";
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useAuth } from '@/context/auth-context'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { ModeToggle } from '@/components/toggle-theme'
+import { Loader2 } from 'lucide-react'
+import { AxiosError } from 'axios'
 
 export default function LoginPage() {
-  const { login, isAuthenticated, isLoading: authLoading } = useAuth();
-  const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const { login, isAuthenticated, isLoading: authLoading } = useAuth()
+  const router = useRouter()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     if (!authLoading && isAuthenticated) {
-      router.replace("/dashboard");
+      router.replace('/dashboard')
     }
-  }, [authLoading, isAuthenticated, router]);
+  }, [authLoading, isAuthenticated, router])
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
+    e.preventDefault()
+    setError('')
 
     if (!email.trim()) {
-      setError("Email is required");
-      return;
+      setError('Email is required')
+      return
     }
     if (password.length < 8) {
-      setError("Password must be at least 8 characters");
-      return;
+      setError('Password must be at least 8 characters')
+      return
     }
 
-    setIsLoading(true);
+    setIsLoading(true)
     try {
-      await login(email, password);
+      await login(email, password)
     } catch (err) {
       if (err instanceof AxiosError) {
-        setError(err.response?.data?.msg || "Invalid credentials");
+        setError(err.response?.data?.msg || 'Invalid credentials')
       } else {
-        setError("Something went wrong. Please try again.");
+        setError('Something went wrong. Please try again.')
       }
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -112,13 +112,13 @@ export default function LoginPage() {
                   Signing in...
                 </>
               ) : (
-                "Sign in"
+                'Sign in'
               )}
             </Button>
           </form>
 
           <p className="mt-6 text-center text-sm text-muted-foreground">
-            Don&apos;t have an account?{" "}
+            Don&apos;t have an account?{' '}
             <Link
               href="/signup"
               className="font-medium text-foreground underline underline-offset-4 hover:text-foreground/80"
@@ -129,5 +129,5 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
-  );
+  )
 }

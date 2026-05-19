@@ -5,13 +5,6 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select'
 import { startInterview } from '@/lib/services/interview'
 import { startAptitude } from '@/lib/services/aptitude'
 import { Loader2, ArrowLeft, ArrowRight } from 'lucide-react'

@@ -1,61 +1,61 @@
-"use client";
+'use client'
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/context/auth-context";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { ModeToggle } from "@/components/toggle-theme";
-import { Loader2 } from "lucide-react";
-import { AxiosError } from "axios";
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useAuth } from '@/context/auth-context'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { ModeToggle } from '@/components/toggle-theme'
+import { Loader2 } from 'lucide-react'
+import { AxiosError } from 'axios'
 
 export default function SignupPage() {
-  const { signup, isAuthenticated, isLoading: authLoading } = useAuth();
-  const router = useRouter();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const { signup, isAuthenticated, isLoading: authLoading } = useAuth()
+  const router = useRouter()
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     if (!authLoading && isAuthenticated) {
-      router.replace("/dashboard");
+      router.replace('/dashboard')
     }
-  }, [authLoading, isAuthenticated, router]);
+  }, [authLoading, isAuthenticated, router])
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
+    e.preventDefault()
+    setError('')
 
     if (!name.trim()) {
-      setError("Name is required");
-      return;
+      setError('Name is required')
+      return
     }
     if (!email.trim()) {
-      setError("Email is required");
-      return;
+      setError('Email is required')
+      return
     }
     if (password.length < 8) {
-      setError("Password must be at least 8 characters");
-      return;
+      setError('Password must be at least 8 characters')
+      return
     }
 
-    setIsLoading(true);
+    setIsLoading(true)
     try {
-      await signup(name, email, password);
+      await signup(name, email, password)
     } catch (err) {
       if (err instanceof AxiosError) {
-        setError(err.response?.data?.msg || "Signup failed");
+        setError(err.response?.data?.msg || 'Signup failed')
       } else {
-        setError("Something went wrong. Please try again.");
+        setError('Something went wrong. Please try again.')
       }
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -71,7 +71,9 @@ export default function SignupPage() {
       <div className="flex-1 flex items-center justify-center px-4">
         <div className="w-full max-w-sm">
           <div className="mb-8">
-            <h1 className="text-2xl font-bold tracking-tight">Create your account</h1>
+            <h1 className="text-2xl font-bold tracking-tight">
+              Create your account
+            </h1>
             <p className="text-sm text-muted-foreground mt-1">
               Get started with AI-powered interview practice
             </p>
@@ -115,7 +117,9 @@ export default function SignupPage() {
                 autoComplete="new-password"
                 disabled={isLoading}
               />
-              <p className="text-xs text-muted-foreground">Minimum 8 characters</p>
+              <p className="text-xs text-muted-foreground">
+                Minimum 8 characters
+              </p>
             </div>
 
             {error && (
@@ -131,13 +135,13 @@ export default function SignupPage() {
                   Creating account...
                 </>
               ) : (
-                "Create account"
+                'Create account'
               )}
             </Button>
           </form>
 
           <p className="mt-6 text-center text-sm text-muted-foreground">
-            Already have an account?{" "}
+            Already have an account?{' '}
             <Link
               href="/login"
               className="font-medium text-foreground underline underline-offset-4 hover:text-foreground/80"
@@ -148,5 +152,5 @@ export default function SignupPage() {
         </div>
       </div>
     </div>
-  );
+  )
 }
