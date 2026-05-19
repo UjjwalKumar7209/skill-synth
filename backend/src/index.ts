@@ -9,7 +9,7 @@ import aptitudeRoutes from './routes/aptitude'
 
 dotenv.config()
 
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 8080
 const app = express()
 
 app.use(cors())
@@ -24,6 +24,6 @@ app.get('/', (_, res) => {
   res.send('SkillSynth Backend Running')
 })
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`)
 })
