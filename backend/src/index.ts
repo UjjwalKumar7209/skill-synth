@@ -12,7 +12,12 @@ dotenv.config()
 const PORT = Number(process.env.PORT) || 8080
 const app = express()
 
-app.use(cors())
+app.use(
+  cors({
+    origin: ['http://localhost:3000', 'https://skill-synth-gray.vercel.app/'],
+    credentials: true
+  })
+)
 app.use(express.json())
 
 app.use('/api/v1/auth', authRoutes)
