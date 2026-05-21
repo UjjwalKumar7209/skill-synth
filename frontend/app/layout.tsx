@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'SkillSynth — AI Interview Practice',
+  title: 'SkillSynth - AI Interview Practice',
   description:
     'Master technical and behavioral interviews with AI-powered practice sessions. Get instant feedback and improve faster.'
 }
